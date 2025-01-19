@@ -15,17 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessagesController = void 0;
 const common_1 = require("@nestjs/common");
 const create_message_dtos_1 = require("./dtos/create-message.dtos");
+const messages_service_1 = require("./messages.service");
 let MessagesController = class MessagesController {
+    constructor(service) {
+        this.messagesService = service;
+    }
     listMessages() {
-        return 'Hello listMessages!';
+        return this.messagesService.findAll();
     }
     createMessages(body) {
         console.log(body);
-        return 'Hello createMessages $body !';
+        return this.messagesService.create(body.content);
     }
-    getMessage(id) {
-        console.log(id);
-        return 'Hello getMessage!';
+    async getMessage(id) {
+        const message = await this.messagesService.findOne(id);
+        if (!message) {
+            throw new common_1.NotFoundException('message not found');
+        }
+        return message;
     }
 };
 exports.MessagesController = MessagesController;
@@ -33,7 +40,7 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", String)
+    __metadata("design:returntype", void 0)
 ], MessagesController.prototype, "listMessages", null);
 __decorate([
     (0, common_1.Post)(),
@@ -46,10 +53,11 @@ __decorate([
     (0, common_1.Get)('/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", String)
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
 ], MessagesController.prototype, "getMessage", null);
 exports.MessagesController = MessagesController = __decorate([
-    (0, common_1.Controller)('messages')
+    (0, common_1.Controller)('messages'),
+    __metadata("design:paramtypes", [messages_service_1.MessagesService])
 ], MessagesController);
 //# sourceMappingURL=messages.controller.js.map
