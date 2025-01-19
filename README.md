@@ -1,2 +1,2 @@
 # StartApp
-This is NestJS StartApp For Me As A BackEnd
+This is NestJS Start App for me as a Backend
